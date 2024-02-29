@@ -11,19 +11,25 @@ export const Home = () => {
   const [empId, setEmpId] = useState("");
   const [pagetab, setPagetab] = useState(true);
   const [error, setError] = useState(null);
+  const [NUMBER, SETnUMBER] = useState(0);
+  const [form_data, setFormData] = useState({
+  
+  });
 
+  
   useEffect(() => {
-    const fetchEmployees = async () => {
-      const response = await fetch("/api/employees");
-      const json = await response.json();
-
-      if (response.ok) {
-        setEmployees(json);
-      }
-    };
-
+    
     fetchEmployees();
-  }, []);
+  }, [pagetab]);
+
+  const fetchEmployees = async () => {
+    const response = await fetch(`/api/employees/get_archived/:is_archived?isArchived=${!pagetab}`);
+    const json = await response.json();
+
+    if (response.ok) {
+      setEmployees(json);
+    }
+  };
 
   const handleEdit = (employee) => {
     setIsEdit(!isEdit);
@@ -37,7 +43,7 @@ export const Home = () => {
     const updatedEmployee = { isArchived: true };
     console.log(employee);
 
-    const response = await fetch(`/api/employees/${employee._id}`, {
+    const response = await fetch(`/api/employees/archive_data/${employee._id}`, {
       method: "PATCH",
       body: JSON.stringify(updatedEmployee),
       headers: {
@@ -76,6 +82,7 @@ export const Home = () => {
 
   return (
     <div className="container">
+      {NUMBER}
       <div className="emp-container">
         <div className="tab-container">
           <h3
@@ -95,59 +102,47 @@ export const Home = () => {
         <div className="emp-list-container">
           {employees &&
             employees.map((employee) =>
-              pagetab ? (
-                !employee.isArchived ? (
-                  <div className="emp-container-details" key={employee._id}>
-                    <h4>{employee.employee_Name}</h4>
-                    <p className="emp-dept">
-                      <strong>{employee.employee_Dept} Department</strong>
-                    </p>
-                    <div className="skill-container">
-                      {employee.employee_Skills.map((skill, index) => (
-                        <p key={index} className="skill-per-item">
-                          {skill}
-                        </p>
-                      ))}
-                    </div>
-                    <div className="emp-btn-container">
-                      <button
-                        onClick={() => handleEdit(employee)}
-                        className="emp-btn"
-                      >
-                        <FaEdit size={20} /> EDIT
-                      </button>
-                      <button
-                        onClick={() => handleArchived(employee)}
-                        className="emp-btn"
-                      >
-                        <FaArchive size={20} /> ARCHIVED
-                      </button>
-                    </div>
-                  </div>
-                ) : null
-              ) : employee.isArchived ? (
+              {return (
                 <div className="emp-container-details" key={employee._id}>
-                  <h4>{employee.employee_Name}</h4>
-                  <p className="emp-dept">
-                    <strong>{employee.employee_Dept} Department</strong>
-                  </p>
-                  <div className="skill-container">
-                    {employee.employee_Skills.map((skill, index) => (
-                      <p key={index} className="skill-per-item">
-                        {skill}
-                      </p>
-                    ))}
-                  </div>
+                <h4>{employee.employee_Name}</h4>
+                <p className="emp-dept">
+                  <strong>{employee.employee_Dept} Department</strong>
+                </p>
+                <div className="skill-container">
+                  {employee.employee_Skills.map((skill, index) => (
+                    <p key={index} className="skill-per-item">
+                      {skill}
+                    </p>
+                  ))}
                 </div>
-              ) : null
+               {
+                pagetab?
+                <div className="emp-btn-container">
+                <button
+                  onClick={() => handleEdit(employee)}
+                  className="emp-btn"
+                >
+                  <FaEdit size={20} /> EDIT
+                </button>
+                <button
+                  onClick={() => handleArchived(employee)}
+                  className="emp-btn"
+                >
+                  <FaArchive size={20} /> ARCHIVED
+                </button>
+              </div>:
+              null 
+               }
+              </div>
+              )}
             )}
         </div>
       </div>
       <div className="form-container">
         {isEdit ? (
-          <UpdateEmployeeForm employee={targetEmp} empId={empId} />
+          <UpdateEmployeeForm employee={targetEmp} empId={empId} fetchEmployees={fetchEmployees} NUMBER = {NUMBER} SETnUMBER ={SETnUMBER} />
         ) : (
-          <AddEmployeeForm />
+          <AddEmployeeForm  fetchEmployees={fetchEmployees} />
         )}
       </div>
     </div>

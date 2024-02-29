@@ -2,7 +2,7 @@
 const { useState } = require("react")
 
 const UpdateEmployeeFrom = (props) => {
-    const {employee, empId} = props
+    const {employee, empId,  fetchEmployees, NUMBER, SETnUMBER} = props
  
     const [employee_Name, setName] = useState(employee.employee_Name)
     const [employee_Dept, setDept] = useState(employee.employee_Dept)
@@ -42,6 +42,7 @@ const UpdateEmployeeFrom = (props) => {
             setDept('')
             setSkills([])
             setError(null)
+            fetchEmployees()
             console.log('Employee Updated', json)
         }
     }
@@ -74,6 +75,7 @@ const UpdateEmployeeFrom = (props) => {
 
 
             <button onClick={handleUpdate}>Update</button>
+            <button onClick={()=>{SETnUMBER(NUMBER+1)}}>ADD</button>
             {error && <div className="error">{error}</div>}
         </div>
     )

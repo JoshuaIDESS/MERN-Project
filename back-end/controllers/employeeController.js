@@ -3,7 +3,10 @@ const mongoose = require('mongoose')
 
 //Get all employees
 const getAllemployees = async (req, res) => {
-    const employee =  await Employee.find({}).sort({createdAt: -1})
+
+    const employee =  await Employee.find({
+        isArchived:req.query.isArchived
+    }).sort({createdAt: -1})
 
     res.status(200).json(employee)
 }

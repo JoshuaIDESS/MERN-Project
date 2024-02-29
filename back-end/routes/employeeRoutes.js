@@ -7,6 +7,8 @@ const router = express.Router()
 // GET *
 router.get('/', getAllemployees)
 
+router.get('/get_archived/:is_archived', getAllemployees)
+
 // GET specific
 router.get('/:id', getEmployee)
 
