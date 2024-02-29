@@ -2,7 +2,7 @@
 const { useState } = require("react")
 
 const UpdateEmployeeFrom = (props) => {
-    const {employee, empId,  fetchEmployees, NUMBER, SETnUMBER} = props
+    const {employee, empId,  fetchEmployees, setIsEdit} = props
  
     const [employee_Name, setName] = useState(employee.employee_Name)
     const [employee_Dept, setDept] = useState(employee.employee_Dept)
@@ -43,6 +43,7 @@ const UpdateEmployeeFrom = (props) => {
             setSkills([])
             setError(null)
             fetchEmployees()
+            setIsEdit(0)
             console.log('Employee Updated', json)
         }
     }
@@ -68,14 +69,18 @@ const UpdateEmployeeFrom = (props) => {
                     :
                     null
             }
-            <input type="text" value={tempSkill} onChange={(e) => setTempSkill(e.target.value)} />
-            <button type="button" onClick={handleAddSkill}>Add Skill</button>
-
-            <h4>Temporary Skill Set</h4>
-
-
+            <div className="skill-input-container">
+              <input className="skill-input"
+                type="text"
+                value={tempSkill}
+                onChange={(e) => setTempSkill(e.target.value)}
+              />
+              <button type="button" onClick={handleAddSkill}>
+                Add Skill
+              </button>
+            </div>
             <button onClick={handleUpdate}>Update</button>
-            <button onClick={()=>{SETnUMBER(NUMBER+1)}}>ADD</button>
+            {/* <button onClick={()=>{SETnUMBER(NUMBER+1)}}>ADD</button> */}
             {error && <div className="error">{error}</div>}
         </div>
     )

@@ -6,7 +6,7 @@ import { FaEdit, FaArchive } from "react-icons/fa";
 
 export const Home = () => {
   const [employees, setEmployees] = useState(null);
-  const [isEdit, setIsEdit] = useState(false);
+  const [isEdit, setIsEdit] = useState(0);
   const [targetEmp, setTargetEmp] = useState(null);
   const [empId, setEmpId] = useState("");
   const [pagetab, setPagetab] = useState(true);
@@ -32,7 +32,7 @@ export const Home = () => {
   };
 
   const handleEdit = (employee) => {
-    setIsEdit(!isEdit);
+    setIsEdit(1);
     setTargetEmp(employee);
     console.log(employee, isEdit);
     setEmpId(employee._id);
@@ -82,7 +82,6 @@ export const Home = () => {
 
   return (
     <div className="container">
-      {NUMBER}
       <div className="emp-container">
         <div className="tab-container">
           <h3
@@ -140,7 +139,7 @@ export const Home = () => {
       </div>
       <div className="form-container">
         {isEdit ? (
-          <UpdateEmployeeForm employee={targetEmp} empId={empId} fetchEmployees={fetchEmployees} NUMBER = {NUMBER} SETnUMBER ={SETnUMBER} />
+          <UpdateEmployeeForm employee={targetEmp} empId={empId} fetchEmployees={fetchEmployees} setIsEdit={setIsEdit}/>
         ) : (
           <AddEmployeeForm  fetchEmployees={fetchEmployees} />
         )}
