@@ -63,7 +63,8 @@ const UpdateEmployeeFrom = (props) => {
                         {employee_Skills.map((skill, index) => (
                             <li className="skill-item" key={index}>{skill}</li>
                         ))}
-                    </ul> :
+                    </ul>
+                    :
                     null
             }
             <input type="text" value={tempSkill} onChange={(e) => setTempSkill(e.target.value)} />

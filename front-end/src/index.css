@@ -8,7 +8,7 @@
 }
 
 body {
-  background: #f1f1f1;
+  background: #ffffff;
   margin: 0;
   font-family: "Poppins";
 }
@@ -56,25 +56,79 @@ header h3 {
 }
 
 .form-container {
+  /* border: 1px solid red; */
   display: flex;
   flex-direction: row;
   width: 30%;
   flex-wrap: wrap;
   justify-content: space-around;
   height: 100%;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 10px;
+}
+
+.tab-container{
+  display: flex;
+  
+  /* border: 1px solid red; */
+}
+.tab-inactive {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  width: 45%;
+  background: var(--primary);
+  /* border: 2px solid var(--primary); */
+  color: #fff;
+  padding: 10px;
+  font-family: "Poppins";
+  border-radius: 4px;
+  cursor: pointer;
+  transition: .5s ease-in-out;
+}
+
+.tab-inactive:hover {
+  background-color: #ffffff;
+  border: 2px solid var(--primary);
+  box-shadow: none;
+  color: #1aac83;
+}
+.tab-active {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  width: 55%;
+  background: #f1f1f1;
+  border: 2px solid #f1f1f1;
+  color: var(--primary);
+  padding: 10px;
+  font-family: "Poppins";
+  border-radius: 4px;
+  cursor: pointer;
+}
+.emp-list-container{
+  /* border: 1px solid blue; */
+  background-color: #f1f1f1;
+  display: flex;
+  flex-direction: column;
+  padding: 0 5%;
 }
 
 .emp-container {
+  /* border: 1px solid red; */
   display: flex;
-  flex-direction: row;
-  width: 50%;
+  flex-direction: column;
+  width: 60%;
   flex-wrap: wrap;
   justify-content: space-around;
   height: 100%;
 }
 
 .emp-container-details {
-  width: 25%;
+  display: flex;
+  flex-direction: column;
+  width: 90%;
   /* border: 5px solid yellow; */
   background: #024744;
   border-radius: 4px;
@@ -85,14 +139,29 @@ header h3 {
   min-height: 7rem;
 }
 
+.skill-container {
+  display: flex;
+  flex-direction: row;
+  /* border: 1px solid red; */
+}
+
+.skill-per-item {  
+  font-size: 0.7em;
+  color: #ffffff;
+  margin: 0 1% 1% 0;
+  padding: 2px 10px;
+  border-radius: 20px;
+  background-color: #1aac83;
+}
+
 .emp-container-details h4 {
-  margin: 0 0 10px 0;
+  margin: 0 0 1% 0;
   font-size: 1.2em;
   color: #ca9263;
 }
 
-.emp-container-details p {
-  margin: 0;
+.emp-dept {
+  margin: 0 0 1% 0;
   font-size: 0.9em;
   color: #fde6c4;
 }
@@ -108,17 +177,50 @@ header h3 {
   color: #333;
 }
 
-/* new workout form */
+.emp-btn-container {
+  display: flex;
+  /* border: 1px solid red; */
+  flex-direction: row;
+  justify-content: space-between;
+  width: 30%;
+  align-self: flex-end;
+
+}
+.emp-btn {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  color: #fde6c4;
+  border: none;
+  background-color: #024744;
+  transition: .8s ease-in-out;
+  /* margin-left: 0; */
+}
+.emp-btn:hover {
+  color: #ca9263;
+  cursor: pointer;
+}
+/* new employee form */
 .form {
   display: flex;
   flex-direction: column;
   padding: 5%;
   width: 100%;
+  background: #f1f1f1;
   /* border: 1px solid red; */
 }
-
-label,
+.form h3 {
+  color: #024744;
+}
 input {
+  display: block;
+  margin: 0;
+}
+
+label {
+  margin-bottom: 0;
+  color: grey;
+  margin-left: 3%;
   display: block;
 }
 
@@ -134,12 +236,19 @@ input {
 
 .form button {
   background: var(--primary);
-  border: 0;
+  border: 2px solid var(--primary);
   color: #fff;
   padding: 10px;
   font-family: "Poppins";
   border-radius: 4px;
   cursor: pointer;
+  transition: .5s ease-in-out;
+}
+
+.form button:hover {
+  background-color: #ffffff;
+  border: 2px solid var(--primary);
+  color: #1aac83;
 }
 
 .skill-list {
@@ -148,6 +257,7 @@ input {
   width: 100%;
   justify-content: flex-start;
   padding: 2%;
+  margin: 0;
 }
 
 .skill-item {
