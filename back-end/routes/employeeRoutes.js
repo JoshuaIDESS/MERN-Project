@@ -1,16 +1,15 @@
 const express = require('express')
-const { getAllemployees, getEmployee, addEmployee, deleteEmployee, updateEmployee } = require('../controllers/employeeController')
-const Employee = require('../models/employeeModel')
+const { getAllArchivedemployees, getAllActiveEmployees, getActiveEmployee, addEmployee, deleteEmployee, updateEmployee } = require('../controllers/employeeController')
 
 const router = express.Router()
 
-// GET *
-router.get('/', getAllemployees)
+// GET list
+router.get('/getArchivedemployees', getAllArchivedemployees)
 
-router.get('/get_archived/:is_archived', getAllemployees)
+router.get('/getActiveEmployees', getAllActiveEmployees)
 
 // GET specific
-router.get('/:id', getEmployee)
+router.get('/getActiveEmployee/:id', getActiveEmployee)
 
 //POST
 router.post('/', addEmployee)
