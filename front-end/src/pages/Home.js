@@ -1,5 +1,4 @@
 import { React, useEffect, useState } from "react";
-import EmployeeInfo from "../components/EmployeeInfo";
 import AddEmployeeForm from "../components/AddEmployeeForm";
 import UpdateEmployeeForm from "../components/UpdateEmployeeForm";
 import { FaEdit, FaArchive } from "react-icons/fa";

@@ -1,3 +1,4 @@
+import { IoCloseSharp } from "react-icons/io5";
 const { useState } = require("react");
 
 const UpdateEmployeeFrom = (props) => {
@@ -9,6 +10,13 @@ const UpdateEmployeeFrom = (props) => {
     employee_Dept: employee.employee_Dept,
     employee_Skills: employee.employee_Skills,
   });
+
+  const handleRemoveSkill = (index) => {
+    setForm((prevForm) => ({
+      ...prevForm,
+      employee_Skills: prevForm.employee_Skills.filter((_, i) => i !== index),
+    }));
+  };
 
   const handleAddSkill = () => {
     if (tempSkill.trim() !== "") {
@@ -30,7 +38,7 @@ const UpdateEmployeeFrom = (props) => {
 
   const handleUpdate = async () => {
     try {
-        // Get the current date and time
+      // Get the current date and time
       const currentDate = new Date();
       const formattedDate = currentDate.toISOString();
 
@@ -54,10 +62,10 @@ const UpdateEmployeeFrom = (props) => {
 
       const responseData = await response.json();
 
-      console.log(responseData)
+      console.log(responseData);
       if (response.ok) {
         console.log("Employee updated successfully:", responseData);
-        setIsEdit("")
+        setIsEdit("");
       } else {
         console.error("Failed to update employee:", responseData);
         // Handle failure
@@ -97,10 +105,12 @@ const UpdateEmployeeFrom = (props) => {
           {form.employee_Skills.map((skill, index) => (
             <li className="skill-item" key={index}>
               {skill}
+              <IoCloseSharp onClick={() => handleRemoveSkill(index)} className="rmv-skill"/>
             </li>
           ))}
         </ul>
       ) : null}
+
       <div className="skill-input-container">
         <input
           className="skill-input"
