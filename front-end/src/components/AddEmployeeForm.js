@@ -1,49 +1,75 @@
 const { useState } = require("react");
 
 const AddEmployeeForm = () => {
-  const [employee_Name, setName] = useState("");
-  const [employee_Dept, setDept] = useState("");
-  const [employee_Skills, setSkills] = useState([]);
+  const [error, setError] = useState("");
   const [tempSkill, setTempSkill] = useState("");
-  const [error, setError] = useState(null);
+  const [form, setForm] = useState({
+    employee_Name: "",
+    employee_Dept: "",
+    employee_Skills: [],
+  });
 
   const handleAddSkill = () => {
     if (tempSkill.trim() !== "") {
-      setSkills([...employee_Skills, tempSkill.trim()]);
+      setForm(prevForm => ({
+        ...prevForm,
+        employee_Skills: [...prevForm.employee_Skills, tempSkill.trim()]
+      }));
       setTempSkill("");
     }
   };
+  
+  function updateForm(key, e) {
+    const value = e.target.value;
+    setForm(prevForm => ({
+      ...prevForm,
+      [key]: value,
+    }));
+  }
 
-  const handleRegister = async (e) => {
-    // e.prevent.Default()
+  const handleRegister = async () => {
+    try {
+      // Get the current date and time
+      const currentDate = new Date();
+      const formattedDate = currentDate.toISOString();
 
-    const employee = {
-      employee_Name,
-      employee_Dept,
-      employee_Skills,
-      isArchived: "false",
-    };
-    console.log(employee);
+      const employeeData = {
+        authorization: {},
+        payload: {
+          ...form,
+          isArchived: false,
+          createdAt: formattedDate,
+        },
+      };
+      // Make a POST request to your API endpoint to add a new employee
+      const response = await fetch("/addEmployee", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(employeeData),
+      });
 
-    const response = await fetch("/api/employees", {
-      method: "POST",
-      body: JSON.stringify(employee),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+      // Parse the JSON response
+      const responseData = await response.json();
 
-    const json = await response.json();
-
-    if (!response.ok) {
-      setError(json.error);
-    }
-    if (response.ok) {
-      setName("");
-      setDept("");
-      setSkills([]);
-      setError(null);
-      console.log("New employee added", json);
+      // Check if the request was successful
+      if (response.ok) {
+        console.log("Employee added successfully:", responseData);
+        setForm({
+          employee_Name: "",
+          employee_Dept: "",
+          employee_Skills: [],
+        })
+        // Handle success
+      } else {
+        console.error("Failed to add employee:", responseData);
+        // Handle failure
+      }
+    } catch (error) {
+      setError(error)
+      console.error("Error adding employee:", error);
+      // Handle error
     }
   };
 
@@ -54,21 +80,21 @@ const AddEmployeeForm = () => {
       <label>Employee Name</label>
       <input
         type="text"
-        value={employee_Name}
-        onChange={(e) => setName(e.target.value)}
+        value={form.employee_Name}
+        onChange={(e) => {updateForm("employee_Name", e)}}
       />
 
       <label>Assigned Department</label>
       <input
         type="text"
-        value={employee_Dept}
-        onChange={(e) => setDept(e.target.value)}
+        value={form.employee_Dept}
+        onChange={(e) => {updateForm("employee_Dept", e)}}
       />
 
       <label>Role</label>
-      {employee_Skills.length !== 0 ? (
+      {form.employee_Skills.length !== 0 ? (
         <ul className="skill-list">
-          {employee_Skills.map((skill, index) => (
+          {form.employee_Skills.map((skill, index) => (
             <li className="skill-item" key={index}>
               {skill}
             </li>
@@ -76,7 +102,8 @@ const AddEmployeeForm = () => {
         </ul>
       ) : null}
       <div className="skill-input-container">
-        <input className="skill-input"
+        <input
+          className="skill-input"
           type="text"
           value={tempSkill}
           onChange={(e) => setTempSkill(e.target.value)}

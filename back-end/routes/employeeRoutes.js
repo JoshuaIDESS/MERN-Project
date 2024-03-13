@@ -12,12 +12,13 @@ router.get('/getActiveEmployees', getAllActiveEmployees)
 router.get('/getActiveEmployee/:id', getActiveEmployee)
 
 //POST
-router.post('/', addEmployee)
+router.post('/addEmployee', addEmployee)
 
 //DELETE
 router.delete('/:id', deleteEmployee)
 
 //UPDATE
-router.patch('/:id', updateEmployee)
+router.patch('/updateEmployee/:id', updateEmployee)
+
 
 module.exports = router

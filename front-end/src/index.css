@@ -78,9 +78,9 @@ header h3 {
   padding: 0;
   text-align: center;
   width: 40%;
-  background: var(--primary);
+  background: #fff;
   /* border: 2px solid var(--primary); */
-  color: #fff;
+  color: var(--primary);
   padding: 10px;
   font-family: "Poppins";
   border-radius: 4px;
@@ -255,7 +255,24 @@ input {
   border: 2px solid var(--primary);
   color: #1aac83;
 }
-
+.cancel-btn {
+  height: min-content;
+  text-align: center;
+  margin-top: 2%;
+  background-color:#f1f1f1;
+  border: 2px solid #f1f1f1;
+  color: #333;
+  padding: 10px;
+  font-family: "Poppins";
+  border-radius: 4px;
+  cursor: pointer;
+  transition: .5s ease-in-out;
+}
+.cancel-btn:hover {
+  background-color:#f1f1f1;
+  border: 2px solid #333;
+  color: #333;
+}
 .skill-list {
   display: flex;
   flex-wrap: wrap;

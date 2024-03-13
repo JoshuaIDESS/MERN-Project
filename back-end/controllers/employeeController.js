@@ -74,7 +74,7 @@ const getActiveEmployee = async (req, res) => {
     const results = await collection
       .find({ _id: new ObjectId(employeeId), isArchived: false })
       .toArray();
-      console.log(results)
+    console.log(results);
 
     if (results.length != 0) {
       response.remarks = "Success";
@@ -95,19 +95,98 @@ const getActiveEmployee = async (req, res) => {
 
 //Post a new employee
 const addEmployee = async (req, res) => {
-  const { employee_Name, employee_Dept, employee_Skills, isArchived } =
-    req.body;
+  // console.log(req)
+  const {
+    employee_Name,
+    employee_Dept,
+    employee_Skills,
+    isArchived,
+    createdAt,
+  } = req.body.payload;
+
+  const response = {
+    remarks: "error",
+    message: "",
+    payload: [],
+  };
 
   try {
-    const employee = await Employee.create({
+    const client = new MongoClient(url);
+    await client.connect();
+    const db = client.db();
+    const collection = db.collection("employees");
+
+    // Create the employee document to insert
+    const employeeDocument = {
       employee_Name,
       employee_Dept,
       employee_Skills,
       isArchived,
-    });
-    res.status(200).json(employee);
+      createdAt,
+    };
+
+    // Insert the employee document into the collection
+    const result = await collection.insertOne(employeeDocument);
+
+    // Respond with the inserted document
+    response.remarks = "Success";
+    response.message = "Employee added successfully";
+    response.payload = req.body.payload;
+    res.status(200).json(response);
+
+    client.close();
   } catch (err) {
-    res.json(400).json({ err: err.message });
+    console.error("Error adding employee:", err);
+    response.message = "Failed to add employee";
+    res.status(400).json(response);
+  }
+};
+//Update a employee
+const updateEmployee = async (req, res) => {
+  const employeeId = req.params.id;
+  const {
+    employee_Name,
+    employee_Dept,
+    employee_Skills,
+    updatedAt,
+  } = req.body.payload;
+
+  const response = {
+    remarks: "error",
+    message: "",
+    payload: [],
+  };
+
+  try {
+    const client = new MongoClient(url);
+    await client.connect();
+    const db = client.db();
+    const collection = db.collection("employees");
+
+    // Update the employee document in the collection
+    const result = await collection.updateOne(
+      { _id: new ObjectId(employeeId) },
+      {
+        $set: {
+          employee_Name,
+          employee_Dept,
+          employee_Skills,
+          updatedAt,
+        },
+      }
+    );
+
+    // Check if the update was successful
+    response.remarks = "Success";
+    response.message = "Employee updated successfully";
+    response.payload = { _id: employeeId, ...req.body.payload }; // Include updated payload
+    res.status(200).json(response);
+
+    client.close();
+  } catch (err) {
+    console.error("Error updating employee:", err);
+    response.message = "Failed to update employee";
+    res.status(400).json(response);
   }
 };
 
@@ -120,28 +199,6 @@ const deleteEmployee = async (req, res) => {
   }
 
   const employee = await Employee.findOneAndDelete({ _id: id });
-
-  if (!employee) {
-    return res.status(400).jsom({ error: "Employee does not exist" });
-  }
-
-  res.status(200).json(employee);
-};
-
-//Update a employee
-const updateEmployee = async (req, res) => {
-  const { id } = req.params;
-
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({ error: "Employee does not exist" });
-  }
-
-  const employee = await Employee.findOneAndUpdate(
-    { _id: id },
-    {
-      ...req.body,
-    }
-  );
 
   if (!employee) {
     return res.status(400).jsom({ error: "Employee does not exist" });

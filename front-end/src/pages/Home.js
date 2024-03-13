@@ -7,13 +7,14 @@ import { FaEdit, FaArchive } from "react-icons/fa";
 export const Home = () => {
   const [activeEmployees, setActiveEmployees] = useState(null);
   const [archivedEmployees, setArchivedEmployees] = useState(null);
-  const [isEdit, setIsEdit] = useState(0);
+  const [empInfo, setEmpInfo] = useState("");
+  const [isEdit, setIsEdit] = useState("");
   const [pagetab, setPagetab] = useState(true);
 
   useEffect(() => {
     fetchArchivedEmployees();
     fetchActiveEmployees();
-  }, [pagetab]);
+  }, [pagetab, isEdit]);
 
   async function fetchActiveEmployees() {
     try {
@@ -36,6 +37,10 @@ export const Home = () => {
   }
 
   const handleArchived = () => {};
+
+  const handleEdit = (employee_id) => {
+    setIsEdit(employee_id)
+  };
 
   return (
     <div className="container">
@@ -74,7 +79,7 @@ export const Home = () => {
                     </div>
                     <div className="emp-btn-container">
                       <button
-                        // onClick={() => handleEdit(employee)}
+                        onClick={() => {handleEdit(employee._id);setEmpInfo(employee)}}
                         className="emp-btn"
                       >
                         <FaEdit size={20} /> EDIT
@@ -106,7 +111,7 @@ export const Home = () => {
                     </div>
                     <div className="emp-btn-container">
                       <button
-                        // onClick={() => handleEdit(employee)}
+                        // onClick={() => handleEdit(employee._id)}
                         className="emp-btn"
                       >
                         <FaEdit size={20} /> ACTIVE
@@ -123,9 +128,9 @@ export const Home = () => {
               })}
         </div>
       </div>
-      {/* <div className="form-container">
-        {isEdit ? <UpdateEmployeeForm /> : <AddEmployeeForm />}
-      </div> */}
+      <div className="form-container">
+        {isEdit ? <UpdateEmployeeForm employee_id = {isEdit} setIsEdit = {setIsEdit} employee = {empInfo}/> : <AddEmployeeForm />}
+      </div>
     </div>
   );
 };
