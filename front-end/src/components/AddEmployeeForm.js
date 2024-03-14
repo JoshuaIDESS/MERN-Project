@@ -1,3 +1,4 @@
+import { IoCloseSharp } from "react-icons/io5";
 const { useState } = require("react");
 
 const AddEmployeeForm = () => {
@@ -8,6 +9,13 @@ const AddEmployeeForm = () => {
     employee_Dept: "",
     employee_Skills: [],
   });
+
+  const handleRemoveSkill = (index) => {
+    setForm((prevForm) => ({
+      ...prevForm,
+      employee_Skills: prevForm.employee_Skills.filter((_, i) => i !== index),
+    }));
+  };
 
   const handleAddSkill = () => {
     if (tempSkill.trim() !== "") {
@@ -97,6 +105,7 @@ const AddEmployeeForm = () => {
           {form.employee_Skills.map((skill, index) => (
             <li className="skill-item" key={index}>
               {skill}
+              <IoCloseSharp onClick={() => handleRemoveSkill(index)} className="rmv-skill"/>
             </li>
           ))}
         </ul>

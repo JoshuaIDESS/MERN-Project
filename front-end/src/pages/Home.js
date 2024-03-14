@@ -4,6 +4,7 @@ import UpdateEmployeeForm from "../components/UpdateEmployeeForm";
 import { FaEdit, FaArchive } from "react-icons/fa";
 
 export const Home = () => {
+  const [error, setError] = useState("");
   const [activeEmployees, setActiveEmployees] = useState(null);
   const [archivedEmployees, setArchivedEmployees] = useState(null);
   const [empInfo, setEmpInfo] = useState("");
@@ -35,10 +36,90 @@ export const Home = () => {
     }
   }
 
-  const handleArchived = () => {};
+  const handleArchived = async (employee_id) => {
+    try {
+      // Get the current date and time
+      const currentDate = new Date();
+      const formattedDate = currentDate.toISOString();
+
+      const employeeData = {
+        authorization: {},
+        payload: {
+          isArchived: true,
+          updatedAt: formattedDate,
+        },
+      };
+      const response = await fetch(
+        `/api/employees/archivedEmployee/${employee_id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(employeeData),
+        }
+      );
+
+      const responseData = await response.json();
+
+      console.log(responseData);
+      setPagetab(1)
+      if (response.ok) {
+        console.log("Employee archived successfully:", responseData);
+        setIsEdit("");
+      } else {
+        console.error("Failed to archive employee:", responseData);
+        // Handle failure
+        setError("Failed to archive employee");
+      }
+    } catch (error) {
+      console.error("Error archiving employee:", error);
+      setError("Error archiving employee");
+    }
+  };
+
+  const handleActive = async (employee_id) => {
+    try {
+      // Get the current date and time
+      const currentDate = new Date();
+      const formattedDate = currentDate.toISOString();
+
+      const employeeData = {
+        authorization: {},
+        payload: {
+          isArchived: false,
+          updatedAt: formattedDate,
+        },
+      };
+      const response = await fetch(
+        `/api/employees/archivedEmployee/${employee_id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(employeeData),
+        }
+      );
+
+      const responseData = await response.json();
+
+      console.log(responseData);
+      console.log(employeeData.payload.isArchived);
+      setPagetab(0)
+      if (employeeData.payload.isArchived = false) {
+        console.log("Employee archived successfully:", responseData);
+      } else {
+        console.log("Employee removed from archived successfully:", responseData);
+      }
+    } catch (error) {
+      console.error("Error archiving employee:", error);
+      setError("Error archiving employee");
+    }
+  };
 
   const handleEdit = (employee_id) => {
-    setIsEdit(employee_id)
+    setIsEdit(employee_id);
   };
 
   return (
@@ -60,6 +141,7 @@ export const Home = () => {
           </h3>
         </div>
         <div className="emp-list-container">
+          {error && <div className="error">{error}</div>}
           {pagetab
             ? activeEmployees &&
               activeEmployees.map((employee) => {
@@ -78,13 +160,16 @@ export const Home = () => {
                     </div>
                     <div className="emp-btn-container">
                       <button
-                        onClick={() => {handleEdit(employee._id);setEmpInfo(employee)}}
+                        onClick={() => {
+                          handleEdit(employee._id);
+                          setEmpInfo(employee);
+                        }}
                         className="emp-btn"
                       >
                         <FaEdit size={20} /> EDIT
                       </button>
                       <button
-                        onClick={() => handleArchived(employee)}
+                        onClick={() => handleArchived(employee._id)}
                         className="emp-btn"
                       >
                         <FaArchive size={20} /> ARCHIVED
@@ -110,7 +195,7 @@ export const Home = () => {
                     </div>
                     <div className="emp-btn-container">
                       <button
-                        // onClick={() => handleEdit(employee._id)}
+                        onClick={() => handleActive(employee._id)}
                         className="emp-btn"
                       >
                         <FaEdit size={20} /> ACTIVE
@@ -128,7 +213,15 @@ export const Home = () => {
         </div>
       </div>
       <div className="form-container">
-        {isEdit ? <UpdateEmployeeForm employee_id = {isEdit} setIsEdit = {setIsEdit} employee = {empInfo}/> : <AddEmployeeForm />}
+        {isEdit ? (
+          <UpdateEmployeeForm
+            employee_id={isEdit}
+            setIsEdit={setIsEdit}
+            employee={empInfo}
+          />
+        ) : (
+          <AddEmployeeForm />
+        )}
       </div>
     </div>
   );

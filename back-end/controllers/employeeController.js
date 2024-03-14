@@ -190,6 +190,51 @@ const updateEmployee = async (req, res) => {
   }
 };
 
+//Update a employee
+const archivedEmployee = async (req, res) => {
+  const employeeId = req.params.id;
+  const {
+    isArchived,
+    updatedAt,
+  } = req.body.payload;
+
+  const response = {
+    remarks: "error",
+    message: "",
+    payload: [],
+  };
+
+  try {
+    const client = new MongoClient(url);
+    await client.connect();
+    const db = client.db();
+    const collection = db.collection("employees");
+
+    // Update the employee document in the collection
+    const result = await collection.updateOne(
+      { _id: new ObjectId(employeeId) },
+      {
+        $set: {
+          isArchived,
+          updatedAt,
+        },
+      }
+    );
+
+    // Check if the update was successful
+    response.remarks = "Success";
+    response.message = "Employee archived successfully";
+    response.payload = { _id: employeeId, ...req.body.payload }; // Include updated payload
+    res.status(200).json(response);
+
+    client.close();
+  } catch (err) {
+    console.error("Error archiving employee:", err);
+    response.message = "Failed to archive employee";
+    res.status(400).json(response);
+  }
+};
+
 //Delete a employee
 const deleteEmployee = async (req, res) => {
   const { id } = req.params;
@@ -214,4 +259,5 @@ module.exports = {
   addEmployee,
   deleteEmployee,
   updateEmployee,
+  archivedEmployee,
 };

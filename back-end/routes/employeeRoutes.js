@@ -1,5 +1,5 @@
 const express = require('express')
-const { getAllArchivedemployees, getAllActiveEmployees, getActiveEmployee, addEmployee, deleteEmployee, updateEmployee } = require('../controllers/employeeController')
+const { getAllArchivedemployees, getAllActiveEmployees, getActiveEmployee, addEmployee, deleteEmployee, updateEmployee, archivedEmployee } = require('../controllers/employeeController')
 
 const router = express.Router()
 
@@ -20,5 +20,7 @@ router.delete('/:id', deleteEmployee)
 //UPDATE
 router.patch('/updateEmployee/:id', updateEmployee)
 
+//ARCHIVE
+router.patch('/archivedEmployee/:id', archivedEmployee)
 
 module.exports = router
