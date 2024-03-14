@@ -19,7 +19,10 @@ const getAllArchivedemployees = async (req, res) => {
     await client.connect();
     const db = client.db();
     const collection = db.collection("employees");
-    const results = await collection.find({ isArchived: true }).toArray();
+    const results = await collection
+      .find({ isArchived: true })
+      .sort({ createdAt: -1 })
+      .toArray();
     response.remarks = "Success";
     response.message = "Successfully fetch";
     response.payload = results;
@@ -44,7 +47,10 @@ const getAllActiveEmployees = async (req, res) => {
     await client.connect();
     const db = client.db();
     const collection = db.collection("employees");
-    const results = await collection.find({ isArchived: false }).toArray();
+    const results = await collection
+      .find({ isArchived: false })
+      .sort({ createdAt: -1 })
+      .toArray();
     response.remarks = "Success";
     response.message = "Successfully fetch";
     response.payload = results;
@@ -144,12 +150,8 @@ const addEmployee = async (req, res) => {
 //Update a employee
 const updateEmployee = async (req, res) => {
   const employeeId = req.params.id;
-  const {
-    employee_Name,
-    employee_Dept,
-    employee_Skills,
-    updatedAt,
-  } = req.body.payload;
+  const { employee_Name, employee_Dept, employee_Skills, updatedAt } =
+    req.body.payload;
 
   const response = {
     remarks: "error",
@@ -193,10 +195,7 @@ const updateEmployee = async (req, res) => {
 //Update a employee
 const archivedEmployee = async (req, res) => {
   const employeeId = req.params.id;
-  const {
-    isArchived,
-    updatedAt,
-  } = req.body.payload;
+  const { isArchived, updatedAt } = req.body.payload;
 
   const response = {
     remarks: "error",
@@ -251,7 +250,9 @@ const deleteEmployee = async (req, res) => {
     const collection = db.collection("employees");
 
     // Delete the employee document from the collection
-    const result = await collection.deleteOne({ _id: new ObjectId(employeeId) });
+    const result = await collection.deleteOne({
+      _id: new ObjectId(employeeId),
+    });
 
     // Check if the deletion was successful
     if (result.deletedCount === 1) {

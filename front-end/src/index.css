@@ -86,12 +86,12 @@ header h3 {
   border-radius: 4px;
   cursor: pointer;
   transform:translateY(5px);
-  transition: .5s ease-in-out;
+  transition: .2s ease-in-out;
 }
 
 .tab-inactive:hover {
   background-color: #ffffff;
-  border: 2px solid var(--primary);
+  border-top: 2px solid var(--primary);
   box-shadow: none;
   color: #1aac83;
   transform:translateY(-1px);
@@ -103,6 +103,7 @@ header h3 {
   width: 60%;
   background: #f1f1f1;
   border: 2px solid #f1f1f1;
+  border-top: 4px solid var(--primary);
   color: var(--primary);
   padding: 10px;
   font-family: "Poppins";
@@ -113,6 +114,8 @@ header h3 {
   /* border: 1px solid blue; */
   background-color: #f1f1f1;
   display: flex;
+  height: min-content;
+  align-items: center;
   flex-direction: column;
   padding: 0 5%;
 }
@@ -247,7 +250,7 @@ input {
   font-family: "Poppins";
   border-radius: 4px;
   cursor: pointer;
-  transition: .5s ease-in-out;
+  transition: .2s ease-in-out;
 }
 
 .form button:hover {
@@ -266,7 +269,7 @@ input {
   font-family: "Poppins";
   border-radius: 4px;
   cursor: pointer;
-  transition: .5s ease-in-out;
+  transition: .2s ease-in-out;
 }
 .cancel-btn:hover {
   background-color:#f1f1f1;
@@ -313,4 +316,47 @@ div.error {
   color: var(--error);
   border-radius: 4px;
   margin: 20px 0;
+}
+
+/* HTML: <div class="loader"></div> */
+.loader-holder {
+  padding: 15rem 0;
+  width: min-content;
+  align-self: center;
+  /* border: 2px solid red; */
+}
+.loader-form {
+  padding: 20% 0;
+  width: min-content;
+  align-self: center;
+  /* border: 2px solid red; */
+}
+.loader {
+  width: 100px;
+  aspect-ratio: 1;
+  display: grid;
+  border: 8px solid #0000;
+  border-radius: 50%;
+  border-right-color: var(--primary);
+  animation: l15 1s infinite linear;
+}
+.loader::before,
+.loader::after {    
+  content: "";
+  grid-area: 1/1;
+  margin: 8px;
+  border: inherit;
+  border-right-color: #333;
+  border-radius: 50%;
+  animation: l15 2s infinite;
+}
+.loader::after {
+  margin: 24px;
+  animation-duration: 3s;
+}
+.loader::before {
+  border-right-color: #024744;
+}
+@keyframes l15{ 
+  100%{transform: rotate(1turn)}
 }
