@@ -15,7 +15,7 @@ router.get('/getActiveEmployee/:id', getActiveEmployee)
 router.post('/addEmployee', addEmployee)
 
 //DELETE
-router.delete('/:id', deleteEmployee)
+router.delete('/deleteEmployee/:id', deleteEmployee)
 
 //UPDATE
 router.patch('/updateEmployee/:id', updateEmployee)

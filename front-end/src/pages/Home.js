@@ -107,7 +107,7 @@ export const Home = () => {
       console.log(responseData);
       console.log(employeeData.payload.isArchived);
       setPagetab(0)
-      if (employeeData.payload.isArchived = false) {
+      if (employeeData.payload.isArchived == false) {
         console.log("Employee archived successfully:", responseData);
       } else {
         console.log("Employee removed from archived successfully:", responseData);
@@ -121,6 +121,28 @@ export const Home = () => {
   const handleEdit = (employee_id) => {
     setIsEdit(employee_id);
   };
+
+  const handleDelete = async (employee_id) => {
+    try {
+      const response = await fetch(`/api/employees/deleteEmployee/${employee_id}`, {
+        method: "DELETE",
+      });
+
+      setPagetab(0)
+      if (response.ok) {
+        console.log("Employee deleted successfully");
+        // Handle success, e.g., navigate to another page or update state
+      } else {
+        console.error("Failed to delete employee:", response.statusText);
+        // Handle failure, e.g., display an error message
+        setError("Failed to delete employee");
+      }
+    } catch (error) {
+      console.error("Error deleting employee:", error);
+      // Handle error, e.g., display an error message
+      setError("Error deleting employee");
+    }
+  }
 
   return (
     <div className="container">
@@ -201,7 +223,7 @@ export const Home = () => {
                         <FaEdit size={20} /> ACTIVE
                       </button>
                       <button
-                        onClick={() => handleArchived(employee)}
+                        onClick={() => handleDelete(employee._id)}
                         className="emp-btn"
                       >
                         <FaArchive size={20} /> DELETE

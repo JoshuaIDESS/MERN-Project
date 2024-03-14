@@ -237,19 +237,39 @@ const archivedEmployee = async (req, res) => {
 
 //Delete a employee
 const deleteEmployee = async (req, res) => {
-  const { id } = req.params;
+  const employeeId = req.params.id;
+  const response = {
+    remarks: "error",
+    message: "",
+    payload: null,
+  };
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({ error: "Employee does not exist" });
+  try {
+    const client = new MongoClient(url);
+    await client.connect();
+    const db = client.db();
+    const collection = db.collection("employees");
+
+    // Delete the employee document from the collection
+    const result = await collection.deleteOne({ _id: new ObjectId(employeeId) });
+
+    // Check if the deletion was successful
+    if (result.deletedCount === 1) {
+      response.remarks = "Success";
+      response.message = "Employee deleted successfully";
+      response.payload = { _id: employeeId };
+      res.status(200).json(response);
+    } else {
+      response.message = "Employee not found";
+      res.status(404).json(response);
+    }
+
+    client.close();
+  } catch (err) {
+    console.error("Error deleting employee:", err);
+    response.message = "Failed to delete employee";
+    res.status(400).json(response);
   }
-
-  const employee = await Employee.findOneAndDelete({ _id: id });
-
-  if (!employee) {
-    return res.status(400).jsom({ error: "Employee does not exist" });
-  }
-
-  res.status(200).json(employee);
 };
 
 module.exports = {
