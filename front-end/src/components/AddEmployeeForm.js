@@ -128,6 +128,7 @@ const AddEmployeeForm = (props) => {
           <input
             type="text"
             value={form.employee_Name}
+            maxlength="50"
             onChange={(e) => {
               updateForm("employee_Name", e);
               setError("");
@@ -138,6 +139,7 @@ const AddEmployeeForm = (props) => {
           <input
             type="text"
             value={form.employee_Dept}
+            maxlength="30"
             onChange={(e) => {
               updateForm("employee_Dept", e);
               setError("");
@@ -163,6 +165,7 @@ const AddEmployeeForm = (props) => {
               className="skill-input"
               type="text"
               value={tempSkill}
+              maxlength="30"
               onChange={(e) => {
                 setTempSkill(e.target.value);
                 setError("");

@@ -288,6 +288,9 @@ input {
 .rmv-skill{
   margin-left: 2px;
   cursor: pointer;
+  border-left: 1px solid #fff;
+  padding-left: 3px;
+  margin-left: 7px;
 }
 
 .skill-item {
